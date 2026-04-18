@@ -65,6 +65,8 @@ pnpm-debug.log*
 !package.json
 !package-lock.json
 !tsconfig.json
+!tsconfig.app.json
+!tsconfig.node.json
 !composer.json
 !*.example.json
 # Specifically ignore the portfolio service account
