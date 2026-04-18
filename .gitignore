@@ -63,6 +63,7 @@ pnpm-debug.log*
 # DO NOT COMMIT THESE!
 *.json
 !package.json
+!package-lock.json
 !tsconfig.json
 !composer.json
 !*.example.json
