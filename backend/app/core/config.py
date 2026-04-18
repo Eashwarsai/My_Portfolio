@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     
     # CORS Configuration
     # Accepts either a list or a comma-separated string from the environment
-    CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:5174"]
+    CORS_ORIGINS: Union[List[str], str] = ["http://localhost:5173", "http://localhost:5174"]
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
