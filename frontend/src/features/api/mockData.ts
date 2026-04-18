@@ -1,4 +1,5 @@
 import type { LearningLogItem } from '../learning-log/api';
+import type { BlogItem, BlogPaginatedResponse } from '../../types/blog';
 
 // ── In-memory mock stores (mutable arrays — simulate a real DB in dev mode) ──
 // These are module-level singletons so mutations persist for the lifetime of the session.
@@ -77,10 +78,11 @@ export function getMockBlogResponse(page = 1, size = 10): BlogPaginatedResponse 
   const published = mockBlogsStore.filter(b => b.published);
   const start = (page - 1) * size;
   return {
+    items: published.slice(start, start + size),
     total: published.length,
     page,
     size,
-    items: published.slice(start, start + size),
+    pages: Math.ceil(published.length / size),
   };
 }
 

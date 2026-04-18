@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { PenLine, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
-import { useGetBlogsQuery } from "../api";
+import { useGetBlogsQuery, type BlogItem } from "../api";
 import BlogCard from "../components/BlogCard";
 import BlogEditorModal from "../components/BlogEditorModal";
 import { useAdmin } from "../../../hooks/useAdmin";
@@ -61,7 +61,7 @@ export default function BlogList() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-              {data?.items.map((blog) => (
+              {data?.items.map((blog: BlogItem) => (
                 <BlogCard key={blog.id} blog={blog} />
               ))}
             </div>

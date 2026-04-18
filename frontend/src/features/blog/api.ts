@@ -1,21 +1,6 @@
 import { baseApi } from '../api/baseApi';
-
-export interface BlogItem {
-  id: number;
-  title: string;
-  slug: string;
-  content: string;
-  published: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BlogPaginatedResponse {
-  total: number;
-  page: number;
-  size: number;
-  items: BlogItem[];
-}
+import type { BlogItem, BlogPaginatedResponse } from '../../types/blog';
+export type { BlogItem, BlogPaginatedResponse };
 
 // We inject our endpoints into the main Redux Store BaseAPI. 
 // This automatically provides us with pre-typed `useGetBlogsQuery` hooks!
@@ -54,7 +39,7 @@ export const blogApi = baseApi.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Blog', (_result, _error, { slug }) => ({ type: 'Blog', id: slug })],
+      invalidatesTags: (_result, _error, { slug }) => ['Blog', { type: 'Blog' as const, id: slug }],
     }),
     deleteBlog: builder.mutation<void, string>({
       query: (slug) => ({

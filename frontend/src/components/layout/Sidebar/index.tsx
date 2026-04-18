@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Menu, ChevronLeft } from "lucide-react";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import ThemeToggle from "../ThemeToggle";
 import MobileHeader from "./MobileHeader";
 import SidebarNav from "./SidebarNav";
