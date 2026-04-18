@@ -1,0 +1,165 @@
+/*
+ * ============================================================
+ * DESIGN TOKENS
+ * Values are space-separated RGB to support tailwind opacity
+ * ============================================================
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Outfit', system-ui, sans-serif;
+
+  --text-display-lg: 4rem;
+  --text-display: 3rem;
+  --text-display-sm: 2rem;
+
+  /* #fafbfc */ --color-bg-primary: 250 251 252;
+  /* #f0f2f5 */ --color-bg-secondary: 240 242 245;
+  /* #e4e7ec */ --color-bg-tertiary: 228 231 236;
+
+  /* #ffffff */ --color-surface: 255 255 255;
+  /* #f8f9fb */ --color-surface-hover: 248 249 251;
+  /* #f0f2f5 */ --color-surface-active: 240 242 245;
+
+  /* #0f1419 */ --color-text-primary: 15 20 25;
+  /* #536471 */ --color-text-secondary: 83 100 113;
+  /* #8899a6 */ --color-text-tertiary: 136 153 166;
+  /* #ffffff */ --color-text-inverse: 255 255 255;
+
+  /* #6366f1 */ --color-accent-primary: 99 102 241;
+  /* #8b5cf6 */ --color-accent-secondary: 139 92 246;
+  /* #a78bfa */ --color-accent-tertiary: 167 139 250;
+  /* #e0e7ff */ --color-accent-muted: 224 231 255;
+
+  /* #d1d5db */ --color-border-primary: 209 213 219;
+  /* #e5e7eb */ --color-border-secondary: 229 231 235;
+  /* #6366f1 */ --color-border-accent: 99 102 241;
+
+  /* #10b981 */ --color-status-success: 16 185 129;
+  /* #f59e0b */ --color-status-warning: 245 158 11;
+  /* #ef4444 */ --color-status-error: 239 68 68;
+  /* #3b82f6 */ --color-status-info: 59 130 246;
+
+  --spacing-section: 6rem;
+  --spacing-section-sm: 4rem;
+  --spacing-container: 1.5rem;
+  --spacing-card: 1.5rem;
+  --spacing-card-sm: 1rem;
+
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+  --radius-input: 0.5rem;
+  --radius-badge: 9999px;
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+  --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow-glow-sm: 0 0 10px rgba(99, 102, 241, 0.2);
+
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  --max-width-content: 72rem;
+  --max-width-narrow: 48rem;
+}
+
+.dark {
+  /* #06060b */ --color-bg-primary: 6 6 11;
+  /* #0d0d14 */ --color-bg-secondary: 13 13 20;
+  /* #15151f */ --color-bg-tertiary: 21 21 31;
+
+  /* #12121c */ --color-surface: 18 18 28;
+  /* #1a1a28 */ --color-surface-hover: 26 26 40;
+  /* #222233 */ --color-surface-active: 34 34 51;
+
+  /* #e8eaed */ --color-text-primary: 232 234 237;
+  /* #9aa0a6 */ --color-text-secondary: 154 160 166;
+  /* #5f6368 */ --color-text-tertiary: 95 99 104;
+  /* #06060b */ --color-text-inverse: 6 6 11;
+
+  /* #818cf8 */ --color-accent-primary: 129 140 248;
+  /* #a78bfa */ --color-accent-secondary: 167 139 250;
+  /* #c4b5fd */ --color-accent-tertiary: 196 181 253;
+  /* #312e81 */ --color-accent-muted: 49 46 129;
+
+  /* #2a2a3d */ --color-border-primary: 42 42 61;
+  /* #1e1e2e */ --color-border-secondary: 30 30 46;
+  /* #818cf8 */ --color-border-accent: 129 140 248;
+
+  /* #34d399 */ --color-status-success: 52 211 153;
+  /* #fbbf24 */ --color-status-warning: 251 191 36;
+  /* #f87171 */ --color-status-error: 248 113 113;
+  /* #60a5fa */ --color-status-info: 96 165 250;
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 10px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3);
+  --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 25px rgba(129, 140, 248, 0.25);
+  --shadow-glow-sm: 0 0 12px rgba(129, 140, 248, 0.15);
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-sans);
+    background-color: rgb(var(--color-bg-primary));
+    color: rgb(var(--color-text-primary));
+    line-height: 1.6;
+    transition: background-color var(--duration-normal) ease, color var(--duration-normal) ease;
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; color: rgb(var(--color-text-primary)); }
+  a { text-decoration: none; transition: color var(--duration-fast) ease; }
+  a:hover { text-decoration: none; }
+  code, pre { font-family: var(--font-mono); }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: rgb(var(--color-bg-secondary)); }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--color-border-primary)); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--color-text-tertiary)); }
+  ::selection { background: rgb(var(--color-accent-primary)); color: rgb(var(--color-text-inverse)); }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-surface/80 backdrop-blur-md border border-border-secondary rounded-card shadow-card;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent-secondary;
+  }
+  .section-container {
+    @apply w-full max-w-content mx-auto px-container;
+  }
+  .section-spacing {
+    @apply py-section;
+  }
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-badge
+           bg-accent-muted text-accent border border-accent/20
+           transition-all duration-fast;
+  }
+  .badge:hover {
+    @apply border-accent/40 shadow-glow-sm;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-6 { animation-delay: 0.6s; }
+}
