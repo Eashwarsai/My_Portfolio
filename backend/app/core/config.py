@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     FIREBASE_SERVICE_ACCOUNT_JSON: str | None = None
     
     USE_FIREBASE_AUTH: bool = True
-    ADMIN_API_KEY: str
+    ADMIN_API_KEY: str | None = None
 
     # Read from .env file
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")

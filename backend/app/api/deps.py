@@ -59,23 +59,28 @@ security = HTTPBearer()
 def verify_admin_key(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Protects admin endpoints. 
-    Strictly verifies Firebase ID tokens.
+    1. Checks if the token matches the secret ADMIN_API_KEY (for scripts/automation).
+    2. Otherwise, strictly verifies Firebase ID tokens (for the frontend dashboard).
     """
     token = credentials.credentials
     
-    # Strictly opt for Firebase token verification
+    # Priority 1: Check if the token is our secret ADMIN_API_KEY
+    if settings.ADMIN_API_KEY and token == settings.ADMIN_API_KEY:
+        logger.info("Admin access granted via ADMIN_API_KEY")
+        return True
+
+    # Priority 2: Strictly verify via Firebase
     if settings.USE_FIREBASE_AUTH:
         try:
             # Verify the ID token passed from the frontend
-            # The Admin SDK verifies the signature, expiration, and audience
             decoded_token = auth.verify_id_token(token)
-            print(f"DEBUG: Admin access granted via Firebase user: {decoded_token.get('email')}")
+            logger.info(f"Admin access granted via Firebase user: {decoded_token.get('email')}")
             return True
         except Exception as e:
-            print(f"DEBUG: Firebase token verification failed: {str(e)}")
+            logger.error(f"Firebase token verification failed: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Invalid or expired Firebase credentials: {str(e)}",
+                detail=f"Invalid or expired credentials: {str(e)}",
             )
 
     # If Firebase auth is disabled (not recommended) but no other method is provided
