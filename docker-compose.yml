@@ -1,0 +1,44 @@
+# ============================================================
+# Local Development Orchestration
+# ============================================================
+# WHAT: Runs all services (Frontend + Backend) locally with one command.
+# WHY:  `docker-compose up` sets up the entire application stack.
+# HOW:  We mount our local code into the containers as "volumes".
+#       This means when you edit code on your machine, it instantly 
+#       updates inside the container (hot-reloading works!).
+
+version: '3.8'
+
+services:
+  # ── FastAPI Backend ──
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the local ./backend/app code perfectly into the container
+      # This enables local dev live-reloading without rebuilding the container
+      - ./backend/app:/app/app
+    environment:
+      - ENVIRONMENT=development
+      - CORS_ORIGINS=http://localhost:5173
+      - DATABASE_URL=sqlite:///./portfolio.db
+    # Override CMD to use --reload for development
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ── React Frontend ──
+  frontend:
+    # Instead of building the production Nginx image, we run the Vite dev server directly 
+    # to maintain blazing fast Hot Module Replacement (HMR) locally.
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      # Exclude node_modules from the host overwrite so the container uses its own
+      - /app/node_modules
+    # Run npm install and start the dev server, exposed to network
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
