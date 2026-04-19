@@ -10,8 +10,7 @@ import { useAdmin } from "../../../hooks/useAdmin";
 
 export default function LearningFeed() {
   const { isAdmin } = useAdmin();
-  const [editingLog, setEditingLog] = useState<LearningLogItem | null>(null);
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [activeEditor, setActiveEditor] = useState<{ mode: 'add' | 'edit', log?: LearningLogItem } | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const categories = ["All", "Frontend", "Backend", "DevOps", "System Design", "General"];
 
@@ -79,7 +78,7 @@ export default function LearningFeed() {
             {isAdmin && (
               <div className="flex justify-center mb-10">
                 <button 
-                  onClick={() => setIsAddingNew(true)}
+                  onClick={() => setActiveEditor({ mode: 'add' })}
                   className="flex items-center gap-2 px-8 py-3 bg-accent text-bg-primary hover:opacity-90 rounded-button font-bold transition-all shadow-glow-md"
                 >
                   <Plus size={20} />
@@ -92,7 +91,7 @@ export default function LearningFeed() {
             {filteredLogs && filteredLogs.length > 0 ? (
               <div className="flex flex-col">
                 {filteredLogs.map((log) => (
-                  <LogEntryCard key={`log-${log.id}`} log={log} onEdit={(l) => setEditingLog(l)} />
+                  <LogEntryCard key={`log-${log.id}`} log={log} onEdit={(l) => setActiveEditor({ mode: 'edit', log: l })} />
                 ))}
               </div>
             ) : (
@@ -123,9 +122,13 @@ export default function LearningFeed() {
         </div>
       </section>
 
-      {/* Page Level Modals to avoid stacking issues */}
-      {isAddingNew && <LearningLogEditorModal onClose={() => setIsAddingNew(false)} />}
-      {editingLog && <LearningLogEditorModal log={editingLog} onClose={() => setEditingLog(null)} />}
+      {/* Page Level Modal - only one can be active */}
+      {activeEditor && (
+        <LearningLogEditorModal 
+          log={activeEditor.log} 
+          onClose={() => setActiveEditor(null)} 
+        />
+      )}
     </>
   );
 }

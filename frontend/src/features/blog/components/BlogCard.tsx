@@ -8,11 +8,11 @@ import BlogEditorModal from "./BlogEditorModal";
 
 interface BlogCardProps {
   blog: BlogItem;
+  onEdit: (blog: BlogItem) => void;
 }
 
-export default function BlogCard({ blog }: BlogCardProps) {
+export default function BlogCard({ blog, onEdit }: BlogCardProps) {
   const { isAdmin } = useAdmin();
-  const [isEditing, setIsEditing] = useState(false);
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
 
   const handleDelete = async () => {
@@ -42,7 +42,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
         </div>
         {isAdmin && (
            <div className="flex items-center gap-1">
-             <button onClick={() => setIsEditing(true)} className="p-1 text-content-tertiary hover:text-accent transition-colors" title="Edit">
+             <button onClick={() => onEdit(blog)} className="p-1 text-content-tertiary hover:text-accent transition-colors" title="Edit">
                <Edit2 size={14} />
              </button>
              <button onClick={handleDelete} disabled={isDeleting} className="p-1 text-content-tertiary hover:text-status-error transition-colors" title="Delete">

@@ -46,6 +46,28 @@ export const blogApi = baseApi.injectEndpoints({
         url: `/v1/blogs/${slug}`,
         method: 'DELETE',
       }),
+      // THE PRO WAY: Surgical Cache Update
+      // For standard pagination, we can still surgically remove the item instantly
+      // from the current page's cache for a smoother UI experience.
+      async onQueryStarted(slug, { dispatch, queryFulfilled }) {
+        // We find all 'getBlogs' query entries in the cache and remove the matching slug
+        const patchResult = dispatch(
+          blogApi.util.updateQueryData('getBlogs', {}, (draft) => {
+            // Note: Since 'getBlogs' uses pagination, we'd ideally need the page/size
+            // but RTK Query allows updating all matches or we can just let invalidation handle it.
+            // For now, manual filter on the draft items if they exist.
+            if (draft.items) {
+              draft.items = draft.items.filter((item) => item.slug !== slug);
+              draft.total -= 1;
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['Blog'],
     }),
   }),

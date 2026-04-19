@@ -8,7 +8,7 @@ import { useAdmin } from "../../../hooks/useAdmin";
 
 export default function BlogList() {
   const { isAdmin } = useAdmin();
-  const [showEditor, setShowEditor] = useState(false);
+  const [activeEditor, setActiveEditor] = useState<{ mode: 'add' | 'edit', blog?: BlogItem } | null>(null);
   // We use our local component state to drive the RTK Query page argument
   const [page, setPage] = useState(1);
   const size = 6; // 6 blogs per page
@@ -41,7 +41,7 @@ export default function BlogList() {
           {isAdmin && (
             <div className="flex justify-center mb-8 animate-fade-in">
               <button 
-                onClick={() => setShowEditor(true)}
+                onClick={() => setActiveEditor({ mode: 'add' })}
                 className="flex items-center gap-2 px-6 py-3 bg-surface hover:bg-surface-hover border border-accent/20 hover:border-accent text-accent rounded-button font-semibold transition-all shadow-glow-sm"
               >
                 <Plus size={20} />
@@ -62,7 +62,7 @@ export default function BlogList() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
               {data?.items.map((blog: BlogItem) => (
-                <BlogCard key={blog.id} blog={blog} />
+                <BlogCard key={blog.id} blog={blog} onEdit={(b) => setActiveEditor({ mode: 'edit', blog: b })} />
               ))}
             </div>
           )}
@@ -93,7 +93,13 @@ export default function BlogList() {
         </div>
       </section>
 
-      {showEditor && <BlogEditorModal onClose={() => setShowEditor(false)} />}
+      {/* Page Level Modal - only one can be active at once */}
+      {activeEditor && (
+        <BlogEditorModal 
+          blog={activeEditor.blog} 
+          onClose={() => setActiveEditor(null)} 
+        />
+      )}
     </>
   );
 }

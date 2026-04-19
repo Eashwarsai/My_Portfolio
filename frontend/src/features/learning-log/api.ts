@@ -74,6 +74,24 @@ export const learningApi = baseApi.injectEndpoints({
         url: `/v1/learning/${id}`,
         method: 'DELETE',
       }),
+      // THE PRO WAY: Surgical Cache Update
+      // When the deletion starts, we manually update the 'getLearningLogs' cache 
+      // to remove the item immediately without a full page refresh.
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          learningApi.util.updateQueryData('getLearningLogs', { skip: 0, limit: 10 }, (draft) => {
+            // Because we use `serializeQueryArgs` focused on the endpoint name, 
+            // the cache key is actually the endpoint name regardless of args.
+            // However, RTK Query still needs a key.
+            return draft.filter((item) => item.id !== id);
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['LearningLog'],
     }),
   }),
