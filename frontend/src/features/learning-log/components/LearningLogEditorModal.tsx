@@ -29,9 +29,10 @@ export default function LearningLogEditorModal({ log, onClose }: LearningLogEdit
       onClose();
       // To simulate instantaneous refetch trigger without full reload, we can trigger window event
       window.dispatchEvent(new Event("log-mutated"));
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to save log:", err);
-      alert("Failed to save. Ensure your API key is correct.");
+      const errorMessage = err?.data?.detail || "An unexpected error occurred.";
+      alert(`Failed to save: ${errorMessage}`);
     }
   };
 

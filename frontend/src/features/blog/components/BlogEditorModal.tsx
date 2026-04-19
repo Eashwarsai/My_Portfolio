@@ -37,13 +37,17 @@ export default function BlogEditorModal({ blog, onClose }: BlogEditorModalProps)
         await createBlog({ title, slug, content, published }).unwrap();
       }
       onClose();
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Failed to save blog:", err);
       // Give a little hint if it's a conflict
-      if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 400) {
-        alert("A blog with this slug already exists! Try another slug.");
+      const errorMessage = err?.data?.detail || "An unexpected error occurred.";
+      
+      if (err?.status === 400) {
+        alert(`Request Failed: ${errorMessage}`);
+      } else if (err?.status === 401) {
+        alert(`Unauthorized: ${errorMessage}. Please ensure you are logged in correctly.`);
       } else {
-        alert("Failed to save. Check your Admin API Key.");
+        alert(`Failed to save: ${errorMessage}`);
       }
     }
   };
