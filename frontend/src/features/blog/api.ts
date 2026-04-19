@@ -49,24 +49,14 @@ export const blogApi = baseApi.injectEndpoints({
       // THE PRO WAY: Surgical Cache Update
       // For standard pagination, we can still surgically remove the item instantly
       // from the current page's cache for a smoother UI experience.
-      async onQueryStarted(slug, { dispatch, queryFulfilled }) {
-        // We find all 'getBlogs' query entries in the cache and remove the matching slug
-        const patchResult = dispatch(
-          blogApi.util.updateQueryData('getBlogs', {}, (draft) => {
-            if (draft.items) {
-              draft.items = draft.items.filter((item) => item.slug !== slug);
-              draft.total -= 1;
-            }
-          })
-        );
+      async onQueryStarted(_slug, { queryFulfilled }) {
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          // No patch to undo, standard invalidation handles it
         }
       },
-      // Silenced for the 'Silent & Instant' best practice
-      // invalidatesTags: ['Blog'],
+      invalidatesTags: ['Blog'],
     }),
   }),
 });
