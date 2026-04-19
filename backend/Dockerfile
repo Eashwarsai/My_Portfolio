@@ -27,7 +27,8 @@ COPY . .
 # Expose the internal port that uvicorn will listen on
 EXPOSE 8000
 
-# Command to run the application using uvicorn
-# --host 0.0.0.0 binds to all network interfaces (required in Docker)
-# --port 8000 specifies the port
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Make the startup script executable
+RUN chmod +x start.sh
+
+# Command to run the application using our custom startup script
+CMD ["./start.sh"]

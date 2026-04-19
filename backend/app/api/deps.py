@@ -22,8 +22,15 @@ if not firebase_admin._apps:
         # Priority 1: Raw JSON string from Environment Variable (Standard for Cloud)
         if settings.FIREBASE_SERVICE_ACCOUNT_JSON:
             logger.info("Initializing Firebase via raw JSON environment variable")
-            service_account_info = json.loads(settings.FIREBASE_SERVICE_ACCOUNT_JSON)
-            cred = credentials.Certificate(service_account_info)
+            try:
+                # Clean up the string (strip leading/trailing whitespace which can happen on Render)
+                json_str = settings.FIREBASE_SERVICE_ACCOUNT_JSON.strip()
+                service_account_info = json.loads(json_str)
+                cred = credentials.Certificate(service_account_info)
+            except json.JSONDecodeError as e:
+                logger.error(f"CRITICAL: FIREBASE_SERVICE_ACCOUNT_JSON is not valid JSON: {e}")
+                logger.error(f"Value received (first 20 chars): {settings.FIREBASE_SERVICE_ACCOUNT_JSON[:20]}...")
+                logger.warning("Ensure the environment variable uses double quotes and contains no stray characters.")
         
         # Priority 2: File Path (Standard for Local Dev)
         elif settings.FIREBASE_SERVICE_ACCOUNT_PATH:
