@@ -42,9 +42,9 @@ export default function LearningLogEditorModal({ log, onClose }: LearningLogEdit
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 animate-fade-in backdrop-blur-sm">
       <div className="w-full max-w-2xl bg-bg-primary border border-border-secondary rounded-card shadow-glow-lg overflow-hidden animate-fade-in-up">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border-secondary bg-surface/50">
-          <h2 className="text-xl font-display font-semibold text-content-primary">
-            {log ? "Edit Journal Entry" : "New Journal Entry"}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border-secondary bg-surface/50">
+          <h2 className="text-xl font-display font-bold text-content-primary tracking-tight">
+            {log ? "Refine Your Thought" : "Capture a Discovery"}
           </h2>
           <button 
             onClick={onClose}
@@ -92,14 +92,14 @@ export default function LearningLogEditorModal({ log, onClose }: LearningLogEdit
              >
                Cancel
              </button>
-             <button
-               type="submit"
-               disabled={isLoading}
-               className="flex items-center justify-center gap-2 px-6 py-2 text-sm font-semibold text-bg-primary bg-accent hover:opacity-90 rounded-button shadow-glow-sm transition-all disabled:opacity-50"
-             >
-               {isLoading && <Loader2 size={16} className="animate-spin" />}
-               {log ? "Save Changes" : "Post Log"}
-             </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="flex items-center justify-center gap-2 px-8 py-2.5 text-sm font-bold text-bg-primary bg-accent hover:opacity-90 rounded-button shadow-glow-sm transition-all disabled:opacity-50 min-w-[120px]"
+              >
+                {isLoading && <Loader2 size={16} className="animate-spin" />}
+                {log ? "Update Log" : "Post Log"}
+              </button>
           </div>
         </form>
       </div>

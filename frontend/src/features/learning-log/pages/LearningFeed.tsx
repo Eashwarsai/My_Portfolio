@@ -3,7 +3,7 @@ import { BookOpen, Loader2, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { useGetLearningLogsQuery } from "../api";
+import { useGetLearningLogsQuery, type LearningLogItem } from "../api";
 import LogEntryCard from "../components/LogEntryCard";
 import LearningLogEditorModal from "../components/LearningLogEditorModal";
 import { useAdmin } from "../../../hooks/useAdmin";
@@ -30,6 +30,17 @@ export default function LearningFeed() {
       setSkip(logs.length);
     }
   }, [inView, isFetching, logs]);
+
+  // Sync Logic: Reset to top on any changes (Add/Edit/Delete)
+  useEffect(() => {
+    const handleMutation = () => {
+      setSkip(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener("log-mutated", handleMutation);
+    return () => window.removeEventListener("log-mutated", handleMutation);
+  }, []);
 
   const filteredLogs = logs?.filter(log => 
     selectedCategory === "All" || log.category === selectedCategory

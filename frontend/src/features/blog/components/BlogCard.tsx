@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ArrowRight, Calendar, Edit2, Trash2, Loader2 } from "lucide-react";
 import type { BlogItem } from "../api";
 import { useDeleteBlogMutation } from "../api";
 import { useAdmin } from "../../../hooks/useAdmin";
-import BlogEditorModal from "./BlogEditorModal";
 
 interface BlogCardProps {
   blog: BlogItem;
@@ -74,8 +72,6 @@ export default function BlogCard({ blog, onEdit }: BlogCardProps) {
           Read article <ArrowRight size={14} />
         </NavLink>
       </div>
-
-      {isEditing && <BlogEditorModal blog={blog} onClose={() => setIsEditing(false)} />}
     </article>
   );
 }

@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import type { LearningLogItem } from '../api';
 import { useDeleteLearningLogMutation } from '../api';
 import MarkdownRenderer from '../../blog/components/MarkdownRenderer';
 import { formatDistanceToNow } from 'date-fns';
 import { Edit2, Trash2, Loader2 } from 'lucide-react';
 import { useAdmin } from '../../../hooks/useAdmin';
-import LearningLogEditorModal from './LearningLogEditorModal';
 
 interface LogEntryCardProps {
   log: LearningLogItem;
