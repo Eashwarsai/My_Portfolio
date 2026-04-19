@@ -32,6 +32,13 @@ class Settings(BaseSettings):
     # Database configuration 
     # Must be provided via .env (DATABASE_URL)
     DATABASE_URL: str
+    
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_postgres_protocol(cls, v: str) -> str:
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
 
     # Environment
     ENVIRONMENT: str = "development"

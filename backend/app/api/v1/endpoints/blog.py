@@ -3,6 +3,10 @@ from sqlmodel import Session
 from app.api.deps import get_session, verify_admin_key
 from app.schemas.blog import BlogCreate, BlogUpdate, BlogResponse, BlogPaginatedResponse
 from app.crud import crud_blog
+import logging
+import traceback
+
+logger = logging.getLogger("app")
 
 # Router specific to the "/blogs" subset
 router = APIRouter()
@@ -15,13 +19,27 @@ def read_blogs(
     session: Session = Depends(get_session)
 ):
     """Retrieve paginated blogs."""
-    skip = (page - 1) * size
-    only_published = not include_unpublished
-    
-    total = crud_blog.count_blogs(session, only_published=only_published)
-    items = crud_blog.get_blogs(session, skip=skip, limit=size, only_published=only_published)
-    
-    return BlogPaginatedResponse(total=total, page=page, size=size, items=items)
+    try:
+        skip = (page - 1) * size
+        only_published = not include_unpublished
+        
+        logger.info(f"Fetching blogs: page={page}, size={size}, only_published={only_published}")
+        
+        total = crud_blog.count_blogs(session, only_published=only_published)
+        items = crud_blog.get_blogs(session, skip=skip, limit=size, only_published=only_published)
+        
+        logger.info(f"Found {total} blogs. Returning {len(items)} items.")
+        
+        return {
+            "total": total,
+            "page": page,
+            "size": size,
+            "items": items
+        }
+    except Exception as e:
+        logger.error(f"Error in read_blogs: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail="Internal Server Error during blog retrieval")
 
 
 @router.get("/{slug}", response_model=BlogResponse)
