@@ -3,7 +3,7 @@ from sqlmodel import Session
 from typing import List
 
 from app.api.deps import get_session, verify_admin_key
-from app.schemas.learning import LearningLogCreate, LearningLogUpdate, LearningLogResponse, HeatmapDay
+from app.schemas.learning import LearningLogCreate, LearningLogUpdate, LearningLogResponse
 from app.crud import crud_learning
 from app.models.learning import LearningLog
 
@@ -13,11 +13,6 @@ router = APIRouter()
 def read_logs(skip: int = 0, limit: int = 20, session: Session = Depends(get_session)):
     """Retrieve journals based on Skip/Limit tailored for Infinite Scrolling UI."""
     return crud_learning.get_learning_logs(session, skip=skip, limit=limit)
-
-@router.get("/heatmap", response_model=List[HeatmapDay])
-def read_heatmap(session: Session = Depends(get_session)):
-    """Retrieve exactly processed grouped counts for plotting on the Github-style Activity Visual."""
-    return crud_learning.get_activity_heatmap(session)
 
 # ── Protected Endpoints (Requires API Key) ──
 

@@ -25,10 +25,3 @@ class LearningLogResponse(LearningLogBase):
     updated_at: datetime
     
     model_config = ConfigDict(from_attributes=True)
-
-# ── Heatmap Single Day Aggregation ──
-# Required payload format for 'react-activity-calendar'
-class HeatmapDay(BaseModel):
-    date: str
-    count: int
-    level: int # Value from 0-4 mapping to the React library opacity ranges

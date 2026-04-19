@@ -33,43 +33,64 @@ export default function LogEntryCard({ log }: LogEntryCardProps) {
 
   // Map category to generic Badge coloring intelligently
   const getCategoryColor = (category: string) => {
-      switch(category.toLowerCase()) {
-          case 'frontend': return 'bg-status-info/10 text-status-info border-status-info/20';
-          case 'backend': return 'bg-status-success/10 text-status-success border-status-success/20';
-          case 'devops': return 'bg-status-warning/10 text-status-warning border-status-warning/20';
-          default: return 'bg-accent/10 text-accent border-accent/20';
-      }
+    switch(category.toLowerCase()) {
+      case 'frontend': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      case 'backend': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'devops': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'system design': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+      default: return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+    }
   }
 
   return (
-    <div className="glass-card p-4 md:p-6 mb-6">
-      <header className="flex justify-between items-start mb-4">
-        <div className="flex flex-col">
-           <span className="text-sm font-semibold text-content-primary mb-1 flex items-center gap-2">
-             Journal Update
-             {isAdmin && (
-               <span className="flex items-center gap-1 ml-2">
-                 <button onClick={() => setIsEditing(true)} className="p-1 text-content-tertiary hover:text-accent transition-colors" title="Edit">
-                   <Edit2 size={14} />
-                 </button>
-                 <button onClick={handleDelete} disabled={isDeleting} className="p-1 text-content-tertiary hover:text-status-error transition-colors" title="Delete">
-                   {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                 </button>
-               </span>
-             )}
-           </span>
-           <span className="text-xs text-content-tertiary">
-             {relativeTime}
-           </span>
-        </div>
-        <span className={`px-2.5 py-1 text-xs font-semibold rounded-badge border ${getCategoryColor(log.category)}`}>
-          {log.category}
-        </span>
-      </header>
+    <div className="relative group animate-fade-in-up">
+      {/* Timeline connector line */}
+      <div className="absolute left-[-21px] top-6 bottom-[-24px] w-[2px] bg-border-secondary group-last:bg-transparent hidden md:block" />
+      
+      {/* Timeline dot */}
+      <div className="absolute left-[-26px] top-[18px] w-3 h-3 rounded-full border-2 border-accent bg-bg-primary z-10 hidden md:block" />
 
-      {/* Render the markdown snippet reliably utilizing the Blog markdown engine */}
-      <div className="bg-surface/50 p-4 rounded-button border border-border-secondary">
+      <div className="glass-card p-5 md:p-7 mb-8 transition-all hover:shadow-glow-sm hover:border-accent/30">
+        <header className="flex flex-wrap justify-between items-start gap-4 mb-5">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-3 mb-1">
+              <span className={`px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-bold rounded-full border ${getCategoryColor(log.category)}`}>
+                {log.category}
+              </span>
+              <span className="text-xs font-mono text-content-tertiary">
+                {new Date(log.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </div>
+            <span className="text-xs text-content-tertiary italic">
+              Logged {relativeTime}
+            </span>
+          </div>
+
+          {isAdmin && (
+            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button 
+                onClick={() => setIsEditing(true)} 
+                className="p-1.5 text-content-tertiary hover:text-accent hover:bg-accent/10 rounded-button transition-all" 
+                title="Edit"
+              >
+                <Edit2 size={16} />
+              </button>
+              <button 
+                onClick={handleDelete} 
+                disabled={isDeleting} 
+                className="p-1.5 text-content-tertiary hover:text-status-error hover:bg-status-error/10 rounded-button transition-all" 
+                title="Delete"
+              >
+                {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={16} />}
+              </button>
+            </div>
+          )}
+        </header>
+
+        {/* Content area */}
+        <div className="prose prose-invert prose-sm max-w-none text-content-secondary leading-relaxed">
           <MarkdownRenderer content={log.content} />
+        </div>
       </div>
 
       {isEditing && <LearningLogEditorModal log={log} onClose={() => setIsEditing(false)} />}

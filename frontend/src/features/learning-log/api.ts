@@ -23,8 +23,19 @@ export const learningApi = baseApi.injectEndpoints({
         return endpointName;
       },
       // Merge incoming paginated data into the existing cache chunk array
+      // We use a Map to ensure unique items by ID, preventing duplicates on re-fetches
       merge: (currentCache, newItems) => {
-        currentCache.push(...newItems);
+        const itemMap = new Map(currentCache.map(item => [item.id, item]));
+        newItems.forEach(item => itemMap.set(item.id, item));
+        
+        // Sort by date (desc) then by created_at (desc) to match backend order
+        const merged = Array.from(itemMap.values()).sort((a, b) => {
+          if (a.date !== b.date) return b.date.localeCompare(a.date);
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        });
+        
+        currentCache.length = 0;
+        currentCache.push(...merged);
       },
       // Refetch if the parameter signature moves forwards (triggering next page loads)
       forceRefetch({ currentArg, previousArg }) {
