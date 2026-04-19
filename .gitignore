@@ -59,20 +59,15 @@ pnpm-debug.log*
 *.db
 *.sqlite3
 
-# Firebase & Security
-# DO NOT COMMIT THESE!
-*.json
-!package.json
-!package-lock.json
-!**/package-lock.json
-!tsconfig.json
-!tsconfig.app.json
-!tsconfig.node.json
-!public/**/*.json
-!composer.json
-!*.example.json
-# Specifically ignore the portfolio service account
+# Firebase, Cloud & Security (SMART IGNORE)
+# We allow standard config JSONs but block secrets
+*-service-account*.json
+*service-account*.json
 portfolio-c2490-*.json
+firebase-key.json
+*secret*.json
+google-services.json
+service-account-file.json
 
 # Antigravity / Agentic Metadata
 .gemini/
