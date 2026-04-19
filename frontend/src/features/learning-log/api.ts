@@ -92,7 +92,7 @@ export const learningApi = baseApi.injectEndpoints({
           patchResult.undo();
         }
       },
-      invalidatesTags: ['LearningLog'],
+      // We surgically remove the item above, so no need for background refetch
     }),
   }),
 });

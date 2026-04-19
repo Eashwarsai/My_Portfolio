@@ -108,10 +108,17 @@ export default function LearningFeed() {
               )
             )}
 
-            {/* Loading Indicator */}
-            {(isLoading || isFetching) && (
-               <div className="flex justify-center py-12">
+            {/* Initial Loading State */}
+            {isLoading && !logs && (
+               <div className="flex justify-center py-20">
                  <Loader2 className="animate-spin text-accent" size={32} />
+               </div>
+            )}
+
+            {/* Fetching More / Background Sync State (more subtle) */}
+            {isFetching && logs && (
+               <div className="flex justify-center py-8">
+                 <Loader2 className="animate-spin text-accent/50" size={24} />
                </div>
             )}
 

@@ -50,17 +50,23 @@ export default function BlogList() {
             </div>
           )}
 
-          {/* Loading States */}
-          {isLoading ? (
+          {/* Initial Loading States */}
+          {isLoading && !data && (
             <div className="flex justify-center py-20">
               <Loader2 className="animate-spin text-accent" size={32} />
             </div>
-          ) : data?.items.length === 0 ? (
+          )}
+
+          {/* Empty State */}
+          {!isLoading && data?.items.length === 0 && (
             <div className="glass-card p-card text-center max-w-sm mx-auto flex flex-col items-center">
                <p className="text-content-secondary mt-2">No blogs published yet.</p>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+          )}
+
+          {/* Grid State (with subtle background fetch indicator if needed) */}
+          {data && data.items.length > 0 && (
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up ${isFetching ? 'opacity-70' : ''}`}>
               {data?.items.map((blog: BlogItem) => (
                 <BlogCard key={blog.id} blog={blog} onEdit={(b) => setActiveEditor({ mode: 'edit', blog: b })} />
               ))}

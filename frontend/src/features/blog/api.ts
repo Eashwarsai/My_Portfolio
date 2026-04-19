@@ -53,9 +53,6 @@ export const blogApi = baseApi.injectEndpoints({
         // We find all 'getBlogs' query entries in the cache and remove the matching slug
         const patchResult = dispatch(
           blogApi.util.updateQueryData('getBlogs', {}, (draft) => {
-            // Note: Since 'getBlogs' uses pagination, we'd ideally need the page/size
-            // but RTK Query allows updating all matches or we can just let invalidation handle it.
-            // For now, manual filter on the draft items if they exist.
             if (draft.items) {
               draft.items = draft.items.filter((item) => item.slug !== slug);
               draft.total -= 1;
@@ -68,7 +65,8 @@ export const blogApi = baseApi.injectEndpoints({
           patchResult.undo();
         }
       },
-      invalidatesTags: ['Blog'],
+      // Silenced for the 'Silent & Instant' best practice
+      // invalidatesTags: ['Blog'],
     }),
   }),
 });
