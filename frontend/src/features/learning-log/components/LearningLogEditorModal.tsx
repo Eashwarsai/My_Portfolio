@@ -21,10 +21,12 @@ export default function LearningLogEditorModal({ log, onClose }: LearningLogEdit
     if (!content.trim()) return;
 
     try {
+      const today = new Date().toISOString().split('T')[0];
+      
       if (log) {
-        await updateLog({ id: log.id, body: { category, content } }).unwrap();
+        await updateLog({ id: log.id, body: { category, content, date: log.date } }).unwrap();
       } else {
-        await createLog({ category, content }).unwrap();
+        await createLog({ category, content, date: today }).unwrap();
       }
       onClose();
       // To simulate instantaneous refetch trigger without full reload, we can trigger window event
