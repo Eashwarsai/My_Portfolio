@@ -24,7 +24,13 @@ export const learningApi = baseApi.injectEndpoints({
       },
       // Merge incoming paginated data into the existing cache chunk array
       // We use a Map to ensure unique items by ID, preventing duplicates on re-fetches
-      merge: (currentCache, newItems) => {
+      merge: (currentCache, newItems, { arg }) => {
+        // If we are fetching the first page (skip 0), it means we are resetting/refreshing
+        // Clear the cache to remove any items that might have been deleted on the server
+        if (arg.skip === 0) {
+          currentCache.length = 0;
+        }
+
         const itemMap = new Map(currentCache.map(item => [item.id, item]));
         newItems.forEach(item => itemMap.set(item.id, item));
         

@@ -9,11 +9,11 @@ import LearningLogEditorModal from './LearningLogEditorModal';
 
 interface LogEntryCardProps {
   log: LearningLogItem;
+  onEdit: (log: LearningLogItem) => void;
 }
 
-export default function LogEntryCard({ log }: LogEntryCardProps) {
+export default function LogEntryCard({ log, onEdit }: LogEntryCardProps) {
   const { isAdmin } = useAdmin();
-  const [isEditing, setIsEditing] = useState(false);
   const [deleteLog, { isLoading: isDeleting }] = useDeleteLearningLogMutation();
 
   const handleDelete = async () => {
@@ -69,7 +69,7 @@ export default function LogEntryCard({ log }: LogEntryCardProps) {
           {isAdmin && (
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button 
-                onClick={() => setIsEditing(true)} 
+                onClick={() => onEdit(log)} 
                 className="p-1.5 text-content-tertiary hover:text-accent hover:bg-accent/10 rounded-button transition-all" 
                 title="Edit"
               >
@@ -92,8 +92,6 @@ export default function LogEntryCard({ log }: LogEntryCardProps) {
           <MarkdownRenderer content={log.content} />
         </div>
       </div>
-
-      {isEditing && <LearningLogEditorModal log={log} onClose={() => setIsEditing(false)} />}
     </div>
   );
 }
