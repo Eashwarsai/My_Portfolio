@@ -31,17 +31,6 @@ export default function LearningFeed() {
     }
   }, [inView, isFetching, logs]);
 
-  // Sync Logic: Reset to top on any changes (Add/Edit/Delete)
-  useEffect(() => {
-    const handleMutation = () => {
-      setSkip(0);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.addEventListener("log-mutated", handleMutation);
-    return () => window.removeEventListener("log-mutated", handleMutation);
-  }, []);
-
   const filteredLogs = logs?.filter(log => 
     selectedCategory === "All" || log.category === selectedCategory
   );
