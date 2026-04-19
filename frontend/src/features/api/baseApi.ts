@@ -25,7 +25,9 @@ import {
 // Base URL — points to FastAPI backend.
 // In development: Vite proxy handles CORS (configured in vite.config.ts)
 // In production: Vercel rewrites handle it, or CORS middleware on FastAPI
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL 
+  ? `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/api` 
+  : "/api";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
